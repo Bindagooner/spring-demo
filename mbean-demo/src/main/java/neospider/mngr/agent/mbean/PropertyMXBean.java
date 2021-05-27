@@ -1,4 +1,4 @@
-package com.poc.mbean;
+package neospider.mngr.agent.mbean;
 
 import java.util.Arrays;
 import java.util.HashMap;

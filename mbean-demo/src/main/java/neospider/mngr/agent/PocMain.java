@@ -1,6 +1,6 @@
-package com.poc;
+package neospider.mngr.agent;
 
-import com.poc.mbean.PropertyMXBean;
+import neospider.mngr.agent.mbean.PropertyMXBean;
 import org.jolokia.jvmagent.JolokiaServer;
 import org.jolokia.jvmagent.JvmAgentConfig;
 
@@ -18,7 +18,7 @@ public class PocMain {
 
     public void initServer() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("com.poc.mbean:name=PropertyMXBean");
+        ObjectName name = new ObjectName("neospider.mngr.agent.mbean:name=PropertyMXBean");
         PropertyMXBean mBean = new PropertyMXBean();
         mbs.registerMBean(mBean, name);
 

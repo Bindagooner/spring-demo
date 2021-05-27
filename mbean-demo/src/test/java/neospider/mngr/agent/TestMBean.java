@@ -1,4 +1,4 @@
-package com.poc;
+package neospider.mngr.agent;
 
 import org.jolokia.client.J4pClient;
 import org.jolokia.client.request.J4pExecRequest;
@@ -37,7 +37,7 @@ public class TestMBean {
         Map<String, String> input = new HashMap<>();
         input.put("prop123", "55555");
         input.put("prop1234", "12345");
-        J4pExecRequest req = new J4pExecRequest("com.poc.mbean:name=PropertyMXBean",
+        J4pExecRequest req = new J4pExecRequest("neospider.mngr.agent.mbean:name=PropertyMXBean",
                 "setProperties", input);
         J4pExecResponse resp = j4pClient.execute(req, "POST");
         Map<String, String> output = resp.getValue();
@@ -50,7 +50,7 @@ public class TestMBean {
         Map<String, String[]> input = new HashMap<>();
         input.put("properties", new String[] {"prop1", "prop2"});
 
-        J4pExecRequest req = new J4pExecRequest("com.poc.mbean:name=PropertyMXBean",
+        J4pExecRequest req = new J4pExecRequest("neospider.mngr.agent.mbean:name=PropertyMXBean",
                 "getProperties", input);
         J4pExecResponse resp = j4pClient.execute(req, "POST");
         Map<String, String> output = resp.getValue();

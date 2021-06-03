@@ -6,7 +6,11 @@ import neospider.mngr.mvc.services.LegacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -24,35 +28,51 @@ public class WelcomeController {
     @Autowired
     private LegacyService legacyService;
 
+    List<LegacyController.Book> bookList;
+
     @GetMapping("/")
     public String main(Model model, HttpSession httpSession) {
 
         Gson gson = new Gson();
         List<String> books = legacyService.listAll();
-        List<LegacyController.Book> bookList = books.stream().map(str -> gson.fromJson(str, LegacyController.Book.class))
+        bookList = books.stream().map(str -> gson.fromJson(str, LegacyController.Book.class))
                 .collect(Collectors.toList());
 
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
-
+        model.addAttribute("book", LegacyController.Book.builder().build());
         log.info("httpSession id: {}", httpSession.getId());
 
         return "welcome"; //view
     }
 
     @GetMapping("/hello")
-    public String mainWithParam(@RequestParam(name = "name", required = false, defaultValue = "") String name,
+    public String mainWithParam(@RequestParam(name = "message", required = false, defaultValue = "") String message,
+                                @ModelAttribute LegacyController.Book book,
                                 Model model, HttpSession httpSession) {
-        List<String> books = legacyService.listAll();
 
-        model.addAttribute("message", name);
+        model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("books", books);
-
+        model.addAttribute("books", bookList);
+        model.addAttribute("book", book);
         log.info("httpSession id: {}", httpSession.getId());
 
         return "welcome"; //view
+    }
+
+    // form for CSRF testing
+    @PostMapping("/saveBook")
+    public String addBook(@ModelAttribute LegacyController.Book book, BindingResult bindingResult, Model model,
+                          HttpSession httpSession, BindingResult errors) {
+        log.info("received book: {}", book.toString());
+        bookList.add(book);
+
+        model.addAttribute("message", message);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("books", bookList);
+        model.addAttribute("book", book);
+        return "welcome";
     }
 
 }

@@ -29,19 +29,37 @@
         <h2>
             <span th:text="'Hello, '"></span> <span sec:authentication="name"></span>
         </h2>
+        <div th:text="${message}"></div>
         <h3>Session Id</h3>
         <p th:text="${#httpSession.id}"/>
     </div>
 
-    <ol>
-        <li th:each="task : ${tasks}" th:text="${task}"></li>
-    </ol>
+    <h3>Add Book</h3>
+    <form action="#" th:action="@{/saveBook}" th:object="${book}" method="post">
+        <ul>
+            <li th:errors="*{name}" />
+            <li th:errors="*{author}" />
+        </ul>
+        <table border="1">
+            <tr>
+                <td><label th:text="Name" /></td>
+                <td><input type="text" th:field="*{name}" /></td>
+            </tr>
+
+            <tr>
+                <td><label th:text="Author" /></td>
+                <td><input type="text" th:field="*{author}" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    </form>
 
     <h3>Books</h3>
     <ol>
         <li th:each="book : ${books}" th:text="${'Name: ' + book.name + ' - Author: ' + book.author}"></li>
     </ol>
-
 
 </main>
 <!-- /.container -->

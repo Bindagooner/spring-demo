@@ -2,9 +2,11 @@ package neospider.mngr.mvc.configuration;
 
 
 import lombok.extern.slf4j.Slf4j;
+import neospider.mngr.mvc.filter.XSSFilter;
 import neospider.mngr.mvc.persistence.entities.UserEntity;
 import neospider.mngr.mvc.persistence.repositories.MyBatisUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 
 import javax.annotation.PostConstruct;
 import java.util.UUID;
@@ -45,11 +48,26 @@ public class JSessionIdSecurityConfiguration extends WebSecurityConfigurerAdapte
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .mvcMatchers("/", "/hello").authenticated()
                 .and()
                 .formLogin().permitAll()
                 .and()
-                .logout().permitAll();
+                .logout().permitAll()
+                .and()
+                .headers()
+                .xssProtection().xssProtectionEnabled(true).and().contentSecurityPolicy("script-src 'self'");
+
+    }
+
+    @Bean
+    public FilterRegistrationBean xssPreventFilter() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+
+        registrationBean.setFilter(new XSSFilter());
+        registrationBean.addUrlPatterns("/*");
+
+        return registrationBean;
     }
 }

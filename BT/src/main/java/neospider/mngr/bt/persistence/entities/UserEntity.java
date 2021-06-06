@@ -1,4 +1,4 @@
-package neospider.mngr.mvc.persistence.entities;
+package neospider.mngr.bt.persistence.entities;
 
 import lombok.Builder;
 import lombok.Data;

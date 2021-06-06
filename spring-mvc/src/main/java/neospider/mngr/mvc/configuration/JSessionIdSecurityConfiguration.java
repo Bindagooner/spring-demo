@@ -3,8 +3,6 @@ package neospider.mngr.mvc.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import neospider.mngr.mvc.filter.XSSFilter;
-import neospider.mngr.mvc.persistence.entities.UserEntity;
-import neospider.mngr.mvc.persistence.repositories.MyBatisUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -32,18 +30,6 @@ public class JSessionIdSecurityConfiguration extends WebSecurityConfigurerAdapte
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    private MyBatisUserRepository userRepository;
-
-    @PostConstruct
-    public void initData() {
-        log.info("Inserting -> {}", userRepository.insert(
-                UserEntity.builder().id(UUID.randomUUID().toString()).username("admin").password(passwordEncoder().encode("password")).role("admin").build()));
-        log.info("Inserting -> {}", userRepository.insert(
-                UserEntity.builder().id(UUID.randomUUID().toString()).username("user").password(passwordEncoder().encode("password")).role("user").build()));
-
     }
 
     @Override

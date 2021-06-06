@@ -1,7 +1,5 @@
 package neospider.mngr.mvc.services;
 
-import neospider.mngr.mvc.persistence.entities.UserEntity;
-import neospider.mngr.mvc.persistence.repositories.MyBatisUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,24 +9,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Map;
 
 @Service
-public class DaoUserDetailService implements UserDetailsService {
+public class UserDetailServiceImpl implements UserDetailsService {
 
-    private MyBatisUserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    public DaoUserDetailService(MyBatisUserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserDetailServiceImpl(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUsername(username);
-        if (userEntity == null) {
+        Map<String, String> usermap = this.userService.getUserByUsername(username);
+        if (usermap == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(userEntity.getUsername(), userEntity.getPassword(),
-                Arrays.asList(new SimpleGrantedAuthority(String.format("ROLE_%s", userEntity.getRole().toUpperCase()))));
+        return new User(usermap.get("username"), usermap.get("password"),
+                Arrays.asList(new SimpleGrantedAuthority(String.format("ROLE_%s", usermap.get("role").toUpperCase()))));
     }
 }

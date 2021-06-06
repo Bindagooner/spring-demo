@@ -3,8 +3,8 @@ server:
   servlet:
     context-path: /demo
 
-legacy-service:
-  url : http://localhost:8080/demo/legacy
+business-tier:
+  url : https://localhost:8000/business-tier
 
 spring:
   jpa:
@@ -28,3 +28,7 @@ spring:
 #    secret: thisIsSecret
 #    expirationMs: 86400000
 
+ssl:
+  custom:
+    trust-store: classpath:security/truststore/bt.p12
+    trust-store-password: changeit

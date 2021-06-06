@@ -1,6 +1,5 @@
 package neospider.mngr.mvc.filter;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 

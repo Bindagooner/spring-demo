@@ -1,9 +1,13 @@
 package neospider.mngr.mvc.configuration;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.web.WebFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,17 +15,10 @@ import org.springframework.context.annotation.Profile;
 import java.util.Properties;
 
 /**
- * not working. implement later.
+ * HazelcastConfiguration.
  */
 @Configuration
-@Profile("default")
 public class HazelcastConfiguration {
-
-    // Hazelcast config
-    @Bean
-    public Config config() {
-        return new Config();
-    }
 
     @Bean
     public WebFilter webFilter(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance) {

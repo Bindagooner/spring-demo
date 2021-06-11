@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import neospider.mngr.mvc.models.Book;
 import neospider.mngr.mvc.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -28,19 +30,29 @@ public class WelcomeController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private ServerProperties serverProperties;
+
     List<Book> bookList;
 
     @GetMapping("/")
     public String home(Model model, HttpSession httpSession) {
 
-        Gson gson = new Gson();
         bookList = bookService.listAll();
+
+        Integer hits = (Integer) httpSession.getAttribute("hits");
+        if (hits == null) {
+            hits = 0;
+        }
+        httpSession.setAttribute("hits", ++hits);
 
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
         model.addAttribute("book", Book.builder().build());
         log.info("httpSession id: {}", httpSession.getId());
+        log.info("hits : {}", httpSession.getAttribute("hits"));
+        model.addAttribute("port", serverProperties.getPort());
 
         return "welcome"; //view
     }
@@ -50,11 +62,19 @@ public class WelcomeController {
                                 @ModelAttribute Book book,
                                 Model model, HttpSession httpSession) {
 
+        Integer hits = (Integer) httpSession.getAttribute("hits");
+        if (hits == null) {
+            hits = 0;
+        }
+        httpSession.setAttribute("hits", ++hits);
+
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
         model.addAttribute("book", book);
         log.info("httpSession id: {}", httpSession.getId());
+        log.info("hits : {}", httpSession.getAttribute("hits"));
+        model.addAttribute("port", serverProperties.getPort());
 
         return "welcome"; //view
     }
@@ -72,6 +92,11 @@ public class WelcomeController {
         model.addAttribute("books", bookList);
         model.addAttribute("book", book);
         return "welcome";
+    }
+
+    @GetMapping("/version")
+    public @ResponseBody ResponseEntity<?> getVersion() {
+        return ResponseEntity.ok("1.1.1.2222");
     }
 
 }

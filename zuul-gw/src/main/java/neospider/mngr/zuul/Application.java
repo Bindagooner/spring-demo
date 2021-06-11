@@ -1,11 +1,11 @@
-package neospider.mngr.mvc;
+package neospider.mngr.zuul;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.session.hazelcast.config.annotation.web.http.EnableHazelcastHttpSession;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
-@EnableHazelcastHttpSession
+@EnableZuulProxy
 public class Application {
 
     public static void main(String[] args) {

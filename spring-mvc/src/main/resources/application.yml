@@ -1,34 +1,24 @@
 server:
-  port: 8080
+  port: 8180
   servlet:
     context-path: /demo
+#  tomcat:
+#    remoteip:
+#      host-header: x-forwarded-for
+#      protocol-header: x-forwarded-proto
 
 business-tier:
   url : https://localhost:8000/business-tier
-
-spring:
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: create-drop
-  datasource:
-    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-
-#security:
-#  jwt:
-#    secret: thisIsSecret
-#    expirationMs: 86400000
 
 ssl:
   custom:
     trust-store: classpath:security/truststore/bt.p12
     trust-store-password: changeit
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
+

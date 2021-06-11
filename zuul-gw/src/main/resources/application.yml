@@ -1,0 +1,32 @@
+zuul:
+  ignoredServices: '*'
+  routes:
+    pt-app:
+      path: /demo/**
+      serviceId: pt-app
+      stripPrefix: false
+      sensitiveHeaders:
+  host:
+    connect-timeout-millis: 20000
+
+pt-app:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: http://localhost:8180,http://localhost:8081
+ribbon:
+  ReadTimeout: 600000
+  connection-timeout: 30000
+  eureka:
+    enabled: false
+server:
+  port: 8765
+#  servlet:
+#    context-path: /gw
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
+    com.netflix: DEBUG

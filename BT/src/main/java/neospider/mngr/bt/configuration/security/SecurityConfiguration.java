@@ -1,8 +1,7 @@
 package neospider.mngr.bt.configuration.security;
 
 import lombok.extern.slf4j.Slf4j;
-import neospider.mngr.bt.persistence.entities.UserEntity;
-import neospider.mngr.bt.persistence.repositories.MyBatisUserRepository;
+import neospider.mngr.bt.persistence.repository.user.MyBatisUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Configuration
@@ -31,10 +32,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     public void initData() {
-        log.info("Inserting -> {}", userRepository.insert(
-                UserEntity.builder().id(UUID.randomUUID().toString()).username("admin").password(passwordEncoder().encode("password")).role("admin").build()));
-        log.info("Inserting -> {}", userRepository.insert(
-                UserEntity.builder().id(UUID.randomUUID().toString()).username("user").password(passwordEncoder().encode("password")).role("user").build()));
+        Map admin = new HashMap<String, String>();
+        admin.put("id", UUID.randomUUID().toString());
+        admin.put("username", "admin");
+        admin.put("password", passwordEncoder().encode("password"));
+        admin.put("role", "admin");
+
+        Map user = new HashMap<String, String>();
+        user.put("id", UUID.randomUUID().toString());
+        user.put("username", "user");
+        user.put("password", passwordEncoder().encode("password"));
+        user.put("role", "user");
+
+        userRepository.deleteAll(); // TODO refresh data
+        log.info("Inserting -> {}", userRepository.insert(admin));
+        log.info("Inserting -> {}", userRepository.insert(user));
 
     }
 

@@ -38,20 +38,16 @@
     </div>
 
     <h3>Add Book</h3>
-    <form action="#" th:action="@{/saveBook}" th:object="${book}" method="post">
-        <ul>
-            <li th:errors="*{name}" />
-            <li th:errors="*{author}" />
-        </ul>
+    <form action="#" th:action="@{/saveBook}" method="post">
         <table border="1">
             <tr>
                 <td><label th:text="Name" /></td>
-                <td><input type="text" th:field="*{name}" /></td>
+                <td><input type="text" name="name" /></td>
             </tr>
 
             <tr>
                 <td><label th:text="Author" /></td>
-                <td><input type="text" th:field="*{author}" /></td>
+                <td><input type="text" name="author" /></td>
             </tr>
             <tr>
                 <td><input type="submit" value="Submit" /></td>

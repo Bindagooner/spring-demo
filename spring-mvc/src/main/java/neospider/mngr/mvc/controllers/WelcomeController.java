@@ -2,7 +2,6 @@ package neospider.mngr.mvc.controllers;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import neospider.mngr.mvc.models.Book;
 import neospider.mngr.mvc.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -13,12 +12,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -33,10 +36,10 @@ public class WelcomeController {
     @Autowired
     private ServerProperties serverProperties;
 
-    List<Book> bookList;
+    List<Map> bookList;
 
     @GetMapping("/")
-    public String home(Model model, HttpSession httpSession) {
+    public String home(HttpServletRequest request, Model model, HttpSession httpSession) {
 
         bookList = bookService.listAll();
 
@@ -49,7 +52,8 @@ public class WelcomeController {
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
-        model.addAttribute("book", Book.builder().build());
+        model.addAttribute("name", "");
+        model.addAttribute("author", "");
         log.info("httpSession id: {}", httpSession.getId());
         log.info("hits : {}", httpSession.getAttribute("hits"));
         model.addAttribute("port", serverProperties.getPort());
@@ -59,7 +63,6 @@ public class WelcomeController {
 
     @GetMapping("/hello")
     public String mainWithParam(@RequestParam(name = "message", required = false, defaultValue = "") String message,
-                                @ModelAttribute Book book,
                                 Model model, HttpSession httpSession) {
 
         Integer hits = (Integer) httpSession.getAttribute("hits");
@@ -71,7 +74,6 @@ public class WelcomeController {
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
-        model.addAttribute("book", book);
         log.info("httpSession id: {}", httpSession.getId());
         log.info("hits : {}", httpSession.getAttribute("hits"));
         model.addAttribute("port", serverProperties.getPort());
@@ -81,16 +83,18 @@ public class WelcomeController {
 
     // form for CSRF testing
     @PostMapping("/saveBook")
-    public String addBook(@ModelAttribute Book book, BindingResult bindingResult, Model model,
-                          HttpSession httpSession, BindingResult errors) {
-        log.info("received book: {}", book.toString());
+    public String addBook(HttpServletRequest request, Model model) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, String> book = new HashMap<>();
+        book.put("name", parameterMap.get("name")[0]);
+        book.put("author", parameterMap.get("author")[0]);
+
         book = bookService.saveBook(book);
         bookList.add(book);
 
         model.addAttribute("message", message);
         model.addAttribute("tasks", tasks);
         model.addAttribute("books", bookList);
-        model.addAttribute("book", book);
         return "welcome";
     }
 

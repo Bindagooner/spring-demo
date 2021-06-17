@@ -12,24 +12,22 @@ server:
 spring:
   application:
     name: business-tier
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: create-drop
-    datasource:
-      url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+  datasource:
+    user-ds:
+      jdbc-url: jdbc:h2:file:./db/user.db;DB_CLOSE_DELAY=-1
       username: sa
       password: sa
       driver-class-name: org.h2.Driver
-    h2:
-      console:
-        enabled: true
-
-mybatis:
-  mapper-locations: classpath*:/mybatis/*Mapper.xml
+      initialization-mode: embedded
+    book-ds:
+      jdbc-url: jdbc:h2:file:./db/book.db;DB_CLOSE_DELAY=-1
+      username: sa1
+      password: sa1
+      driver-class-name: org.h2.Driver
+      initialization-mode: embedded
+  h2:
+    console:
+      enabled: true
 
 logging:
   level:

@@ -2,12 +2,12 @@ package neospider.mngr.bt.services;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import neospider.mngr.bt.persistence.entities.BookEntity;
-import neospider.mngr.bt.persistence.repositories.MyBatisBookRepository;
+import neospider.mngr.bt.persistence.repository.book.MyBatisBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,9 +23,22 @@ public class BookService {
 
     @PostConstruct
     public void init() {
-        BookEntity book1 = BookEntity.builder().name("aaa").author("bbbb").id(UUID.randomUUID().toString()).build();
-        BookEntity book2 = BookEntity.builder().name("aaa2").author("bbbb3").id(UUID.randomUUID().toString()).build();
-        BookEntity book3 = BookEntity.builder().name("aaa3").author("bbbb3").id(UUID.randomUUID().toString()).build();
+        Map book1 = new HashMap<String, String>();
+        book1.put("name", "aaa");
+        book1.put("author", "bbbb");
+        book1.put("id", UUID.randomUUID().toString());
+
+        Map book2 = new HashMap<String, String>();
+        book2.put("name", "aaa2");
+        book2.put("author", "bbbb2");
+        book2.put("id", UUID.randomUUID().toString());
+
+        Map book3 = new HashMap<String, String>();
+        book3.put("name", "aaa3");
+        book3.put("author", "bbbb3");
+        book3.put("id", UUID.randomUUID().toString());
+
+        bookRepository.deleteAll(); // TODO refresh data
         bookRepository.insert(book1);
         bookRepository.insert(book2);
         bookRepository.insert(book3);
@@ -33,20 +46,18 @@ public class BookService {
         log.info("init data done");
     }
 
-    public BookEntity save(Map<String, String> map) {
-        BookEntity book = BookEntity.builder().author(map.get("author"))
-                .id(UUID.randomUUID().toString()).name(map.get("name")).build();
-
-        bookRepository.insert(book);
-        log.info("saved new book: {}", book.toString());
-        return book;
+    public Map save(Map<String, String> map) {
+        map.put("id",UUID.randomUUID().toString());
+        bookRepository.insert(map);
+        log.info("saved new book: {}", map.get("id"));
+        return map;
     }
 
-    public BookEntity findById(String id) {
+    public Map findById(String id) {
         return bookRepository.findById(id);
     }
 
-    public List<BookEntity> listAll() {
+    public List<Map> listAll() {
         return bookRepository.listAll();
     }
 }

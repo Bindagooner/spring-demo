@@ -15,7 +15,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
@@ -101,6 +104,19 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     public String getHeader(String name) {
         String value = super.getHeader(name);
         return XSSUtils.stripXSS(value);
+    }
+
+    @Override
+    public Map<String, String[]> getParameterMap() {
+        Set<String> names = super.getParameterMap().keySet();
+        Map<String, String[]> parameterMap = new HashMap<>(names.size());
+
+        for (String name : names) {
+            String[] values = getParameterValues(name);
+            parameterMap.put(name, values);
+            values = null;
+        }
+        return Collections.unmodifiableMap(parameterMap);
     }
 
     @Override

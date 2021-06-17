@@ -2,7 +2,6 @@ package neospider.mngr.bt.controllers;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import neospider.mngr.bt.persistence.entities.UserEntity;
 import neospider.mngr.bt.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,7 @@ public class UserController extends BaseController {
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
         log.info("get user by username request received, username={}", username);
-        UserEntity user = userService.getUserByUserName(username);
+        Map user = userService.getUserByUserName(username);
         if (null == user) {
             return new ResponseEntity("User not found", HttpStatus.NOT_FOUND);
         }

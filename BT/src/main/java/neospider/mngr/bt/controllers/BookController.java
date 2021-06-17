@@ -2,7 +2,6 @@ package neospider.mngr.bt.controllers;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import neospider.mngr.bt.persistence.entities.BookEntity;
 import neospider.mngr.bt.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class BookController extends BaseController {
     @PostMapping("")
     public ResponseEntity<?> saveBook(@RequestBody Map<String, String> map) {
         log.info("save book.");
-        BookEntity saved = bookService.save(map);
+        Map saved = bookService.save(map);
         return buildMapSuccessResponse(saved);
     }
 

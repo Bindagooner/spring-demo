@@ -10,13 +10,14 @@ server:
     key-store: classpath:security/bt.p12
 
 spring:
-  application:
-    name: business-tier
   datasource:
     user-ds:
       jndi-name: java:comp/env/jdbc/userds
     book-ds:
       jndi-name: java:comp/env/jdbc/bookds
+  h2:
+    console:
+      enabled: true
 
 logging:
   level:

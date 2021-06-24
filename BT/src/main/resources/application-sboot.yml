@@ -1,0 +1,35 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /business-tier
+  ssl:
+    enabled: true
+    key-alias: bt
+    key-store-password: changeit
+    key-store-type: pkcs12
+    key-store: classpath:security/bt.p12
+
+spring:
+  datasource:
+    user-ds:
+      jdbc-url: jdbc:h2:file:./db/user.db;DB_CLOSE_DELAY=-1
+      username: sa
+      password: sa
+      driver-class-name: org.h2.Driver
+      initialization-mode: embedded
+    book-ds:
+      jdbc-url: jdbc:h2:file:./db/book.db;DB_CLOSE_DELAY=-1
+      username: sa1
+      password: sa1
+      driver-class-name: org.h2.Driver
+      initialization-mode: embedded
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG

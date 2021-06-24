@@ -1,5 +1,9 @@
 */target/
 *.iml
-*/.idea
+*/.idea/
 */.mvn
 *.class
+**/.idea/
+integration/server/.idea/
+integration/client/.idea/
+.idea/

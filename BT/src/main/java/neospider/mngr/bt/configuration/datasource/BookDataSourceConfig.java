@@ -5,12 +5,15 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
 import javax.sql.DataSource;
 
@@ -19,9 +22,19 @@ import javax.sql.DataSource;
 public class BookDataSourceConfig {
 
     @Bean(name = "bookDataSource")
+
+    @Profile("sboot")
     @ConfigurationProperties(prefix = "spring.datasource.book-ds")
     public DataSource getbookDatasource() {
         return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "bookDataSource")
+    @Profile("!sboot")
+    public DataSource getBookJndiDatasource(@Value("${spring.datasource.book-ds.jndi-name}") String jndi) {
+        JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
+        dataSourceLookup.setResourceRef(true);
+        return dataSourceLookup.getDataSource(jndi);
     }
 
     @Bean(name = "bookSqlSessionFactory")

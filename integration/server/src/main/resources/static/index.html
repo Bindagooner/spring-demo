@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Time over WebSocket</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script type="text/javascript">
+
+        var sock = new WebSocket('ws://localhost:8080/time');
+        sock.onopen = function () {
+            console.log("onopen");
+            document.getElementById('time').innerHTML = 'Connecting...';
+        };
+        sock.onmessage = function (e) {
+            console.log("message received");
+            console.log(e.data);
+            document.getElementById('time').innerHTML = e.data;
+        };
+        sock.onclose = function () {
+            console.log("onclose");
+            document.getElementById('time').innerHTML = "Server closed connection or hasn't been started";
+        };
+
+        btnClick = function () {
+            var sb = document.getElementById("symbol").value;
+            console.log("sending symbol: "  + sb);
+            var msg = {symbol: sb};
+            sock.send(JSON.stringify(msg));
+        }
+
+    </script>
+</head>
+
+<body style="margin: 0">
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript!
+    WebSocket relies on Javascript being enabled. Please enable Javascript and reload this page!</h2></noscript>
+<input type="text" id="symbol" placeholder="VIC, HDB, VHM, BID, CTG" width="500px"> <button type="button" onclick="btnClick()">GO</button>
+<div id="time"
+     style="position: absolute;
+        bottom: 0;
+        font-size: 200%;
+        height: 100px;
+        margin: auto;
+        text-align: center;
+        top: 0;
+        width: 100%;">Starting...</div>
+</body>
+</html>

@@ -7,3 +7,6 @@
 #    io:
 #      netty: DEBUG
 
+spring:
+  webflux:
+    base-path: /ws-integration

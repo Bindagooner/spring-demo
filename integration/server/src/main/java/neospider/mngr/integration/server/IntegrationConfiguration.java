@@ -8,7 +8,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.webflux.dsl.WebFlux;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Configuration

@@ -18,7 +18,7 @@ public class PocMain {
 
     public void initServer() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("neospider.mngr.agent.mbean:name=PropertyMXBean");
+        ObjectName name = new ObjectName("com.van.mngr.agent.mbean:name=PropertyMXBean");
         PropertyMXBean mBean = new PropertyMXBean();
         mbs.registerMBean(mBean, name);
 

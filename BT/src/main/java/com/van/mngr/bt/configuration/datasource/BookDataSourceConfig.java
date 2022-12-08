@@ -18,7 +18,7 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "neospider.mngr.bt.persistence.repository.book", sqlSessionFactoryRef = "bookSqlSessionFactory")
+@MapperScan(basePackages = "com.van.mngr.bt.persistence.repository.book", sqlSessionFactoryRef = "bookSqlSessionFactory")
 public class BookDataSourceConfig {
 
     @Bean(name = "bookDataSource")

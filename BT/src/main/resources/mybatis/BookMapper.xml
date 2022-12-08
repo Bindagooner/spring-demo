@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="neospider.mngr.bt.persistence.repository.book.MyBatisBookRepository" >
+<mapper namespace="com.van.mngr.bt.persistence.repository.book.MyBatisBookRepository" >
     <!--<cache />-->
     <resultMap id="book" type="map" >
         <id column="id" property="id" jdbcType="VARCHAR" />
